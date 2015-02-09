@@ -34,8 +34,10 @@ app.all('*', function(req, res, next) {
 // /api/recipe/search.json?q=pork+chops&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7
 
 app.get('/api/search/:query', function(req, res) {
-  console.log('Busca!!!');
-  request.get(appConfig.REMOTE_API_HOST + '/api/recipe/search.json?q=pork+chops&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7').end(function(data) {
+  console.log('Busca!!! '+ req.params.query);
+  var myQuery = req.params.query.replace(' '+'+');
+  console.log(myQuery);
+  request.get(appConfig.REMOTE_API_HOST + '/api/recipe/search.json?q='+myQuery+'&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7').end(function(data) {
     res.set('Content-Type', 'application/json')
     console.log(data.body);
     res.send(data.body)
