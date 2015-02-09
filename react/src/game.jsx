@@ -65,13 +65,18 @@ var Game = React.createClass({
   },
 
   render: function() {
-    if(this.state.game.similar_games && this.state.game.similar_games.length) {
+    console.log('eita maluco');
+    console.log(this.state.game);
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+      console.log('maluco passou');
       var relatedGames = []
       var self = this
-      this.state.game.similar_games.forEach(function(game) {
-        var gameURI = self.getURI(game.id, game.name)
+      this.state.game.ingredients.forEach(function(game) {
+        console.log('related');
+        console.log(game);
+        var gameURI = self.getURI(game.id, game.title)
         var gameKey = "related-" + game.id
-        relatedGames.push(<li key={gameKey}><Link onClick={self.beginImageLoad} href={gameURI}>{game.name}</Link></li>)
+        relatedGames.push(<li key={gameKey}><Link onClick={self.beginImageLoad} href='#'>{game.title}</Link></li>)
       })
       var related = (
         <div key="game-related" className="game-related">
@@ -86,15 +91,15 @@ var Game = React.createClass({
       var related = null
     }
     return (
-      <DocumentTitle title={this.state.game.name}>
+      <DocumentTitle title={this.state.game.title}>
         <div key="game-detail" className="game-detail clearfix">
-          <h1 ref="gameTitle" key="game-title" className="game-title">{this.state.game.name}</h1>
+          <h1 ref="gameTitle" key="game-title" className="game-title">{this.state.game.title}</h1>
           <div key="game-info" className="game-info">
             <p ref="gameDeck" key="game-deck">{this.state.game.deck}</p>
             {related}
           </div>
           <div key="game-image-container" className="game-image-container">
-            <img className="game-image" ref="gameImage" onLoad={this.confirmImageLoad} key="game-image" src={this.state.game.image.medium_url} alt={this.state.game.name} />
+            <img className="game-image" ref="gameImage" onLoad={this.confirmImageLoad} key="game-image" src={this.state.game.imageUrl} alt={this.state.game.name} />
           </div>
         </div>
       </DocumentTitle>

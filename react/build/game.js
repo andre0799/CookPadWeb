@@ -65,13 +65,18 @@ var Game = React.createClass({displayName: "Game",
   },
 
   render: function() {
-    if(this.state.game.similar_games && this.state.game.similar_games.length) {
+    console.log('eita maluco');
+    console.log(this.state.game);
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+      console.log('maluco passou');
       var relatedGames = []
       var self = this
-      this.state.game.similar_games.forEach(function(game) {
-        var gameURI = self.getURI(game.id, game.name)
+      this.state.game.ingredients.forEach(function(game) {
+        console.log('related');
+        console.log(game);
+        var gameURI = self.getURI(game.id, game.title)
         var gameKey = "related-" + game.id
-        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: gameURI}, game.name)))
+        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.title)))
       })
       var related = (
         React.createElement("div", {key: "game-related", className: "game-related"}, 
@@ -86,15 +91,15 @@ var Game = React.createClass({displayName: "Game",
       var related = null
     }
     return (
-      React.createElement(DocumentTitle, {title: this.state.game.name}, 
+      React.createElement(DocumentTitle, {title: this.state.game.title}, 
         React.createElement("div", {key: "game-detail", className: "game-detail clearfix"}, 
-          React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.name), 
+          React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.title), 
           React.createElement("div", {key: "game-info", className: "game-info"}, 
             React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.deck), 
             related
           ), 
           React.createElement("div", {key: "game-image-container", className: "game-image-container"}, 
-            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.image.medium_url, alt: this.state.game.name})
+            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.imageUrl, alt: this.state.game.name})
           )
         )
       )

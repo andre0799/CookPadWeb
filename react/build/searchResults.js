@@ -17,9 +17,12 @@ var SearchResults = React.createClass({displayName: "SearchResults",
 
   mixins: [reactAsync.Mixin, Reflux.ListenerMixin],
 
-  getInitialStateAsync: function(cb) {    
+  getInitialStateAsync: function(cb) { 
+
     appActions.searchUpdate(this.props.query)
     searchStore.listen(function(data) {
+      console.log('dataaaaa');
+      console.dir(data);
       try {
         return cb(null, {
           searchString: data.searchString,
@@ -49,18 +52,21 @@ var SearchResults = React.createClass({displayName: "SearchResults",
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
+
       this.state.searchResults.forEach(function(game) {
-        if(game.image) {
-          var gameURL = '/game/' + game.id + '/' + slug(game.name)
+        if(game.imageUrl) {
+          var gameURL = '/game/' + game.id + '/' + slug(game.title);
           results.push(            
             React.createElement("div", {key: game.id, className: "search-result clearfix"}, 
               React.createElement("div", {className: "search-image"}, 
-                React.createElement(Link, {href: gameURL}, React.createElement("img", {src: game.image.icon_url, alt: game.name}))
+                React.createElement(Link, {href: gameURL}, React.createElement("img", {src: game.imageUrl, alt: game.title}))
               ), 
-              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: gameURL}, game.name))
+              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: gameURL}, game.title))
             ))
         }
       })
+      console.log('result!');
+      console.dir(results);
     } else {
       results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Games Matching '", this.state.searchString, "'"))
     }

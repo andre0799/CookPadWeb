@@ -12,15 +12,16 @@ var searchStore = Reflux.createStore({
   },
 
   handleSearchUpdate: function() {
+    console.log('search1');
     var self = this
     var searchString = arguments[0]
     request
       .get(appConfig.LOCAL_API_HOST + '/api/search/' + searchString)
       .end(function(err, res) {
-        if(res.body && res.body.results) {
+        if(res.body && res.body.result) {
           self.trigger({
             searchString: searchString,
-            searchResults: res.body.results
+            searchResults: res.body.result
           })
         } else {
           self.trigger({

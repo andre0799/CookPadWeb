@@ -24651,7 +24651,7 @@ module.exports = appActions
 },{"reflux":191}],218:[function(require,module,exports){
 module.exports = {
   LOCAL_API_HOST: 'http://localhost:4000',
-  REMOTE_API_HOST: 'www.giantbomb.com',
+  REMOTE_API_HOST: 'api.allthecooks.com',
   GIANT_BOMB_API_KEY: '966f78bbd84fb51dcc37c4d125bddd5148401b5f' // please change
 }
 },{}],219:[function(require,module,exports){
@@ -24722,13 +24722,18 @@ var Game = React.createClass({displayName: "Game",
   },
 
   render: function() {
-    if(this.state.game.similar_games && this.state.game.similar_games.length) {
+    console.log('eita maluco');
+    console.log(this.state.game);
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+      console.log('maluco passou');
       var relatedGames = []
       var self = this
-      this.state.game.similar_games.forEach(function(game) {
-        var gameURI = self.getURI(game.id, game.name)
+      this.state.game.ingredients.forEach(function(game) {
+        console.log('related');
+        console.log(game);
+        var gameURI = self.getURI(game.id, game.title)
         var gameKey = "related-" + game.id
-        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: gameURI}, game.name)))
+        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.title)))
       })
       var related = (
         React.createElement("div", {key: "game-related", className: "game-related"}, 
@@ -24743,15 +24748,15 @@ var Game = React.createClass({displayName: "Game",
       var related = null
     }
     return (
-      React.createElement(DocumentTitle, {title: this.state.game.name}, 
+      React.createElement(DocumentTitle, {title: this.state.game.title}, 
         React.createElement("div", {key: "game-detail", className: "game-detail clearfix"}, 
-          React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.name), 
+          React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.title), 
           React.createElement("div", {key: "game-info", className: "game-info"}, 
             React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.deck), 
             related
           ), 
           React.createElement("div", {key: "game-image-container", className: "game-image-container"}, 
-            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.image.medium_url, alt: this.state.game.name})
+            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.imageUrl, alt: this.state.game.name})
           )
         )
       )
@@ -24905,9 +24910,12 @@ var SearchResults = React.createClass({displayName: "SearchResults",
 
   mixins: [reactAsync.Mixin, Reflux.ListenerMixin],
 
-  getInitialStateAsync: function(cb) {    
+  getInitialStateAsync: function(cb) { 
+
     appActions.searchUpdate(this.props.query)
     searchStore.listen(function(data) {
+      console.log('dataaaaa');
+      console.dir(data);
       try {
         return cb(null, {
           searchString: data.searchString,
@@ -24937,18 +24945,21 @@ var SearchResults = React.createClass({displayName: "SearchResults",
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
+
       this.state.searchResults.forEach(function(game) {
-        if(game.image) {
-          var gameURL = '/game/' + game.id + '/' + slug(game.name)
+        if(game.imageUrl) {
+          var gameURL = '/game/' + game.id + '/' + slug(game.title);
           results.push(            
             React.createElement("div", {key: game.id, className: "search-result clearfix"}, 
               React.createElement("div", {className: "search-image"}, 
-                React.createElement(Link, {href: gameURL}, React.createElement("img", {src: game.image.icon_url, alt: game.name}))
+                React.createElement(Link, {href: gameURL}, React.createElement("img", {src: game.imageUrl, alt: game.title}))
               ), 
-              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: gameURL}, game.name))
+              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: gameURL}, game.title))
             ))
         }
       })
+      console.log('result!');
+      console.dir(results);
     } else {
       results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Games Matching '", this.state.searchString, "'"))
     }
@@ -24984,6 +24995,11 @@ var gameStore = Reflux.createStore({
   },
 
   loadGameData: function() {
+    console.log('search2');
+    console.log(arguments[0]);
+    console.dir(this.gameData);
+    console.log('end');
+
     var gameId = arguments[0]
     if(this.gameData[gameId]) {
       this.trigger(this.gameData[gameId])
@@ -24992,7 +25008,11 @@ var gameStore = Reflux.createStore({
       request
         .get(appConfig.LOCAL_API_HOST + '/api/game/' + gameId)
         .end(function(err, res) {
+          console.log('le sapohaa!');
+          console.dir(res.body);
           if(res.body && res.body.results) {
+            console.log('my body result');
+            console.log(res.body.results);
             self.gameData[gameId] = res.body.results
             self.trigger(res.body.results)
           }
@@ -25018,15 +25038,16 @@ var searchStore = Reflux.createStore({
   },
 
   handleSearchUpdate: function() {
+    console.log('search1');
     var self = this
     var searchString = arguments[0]
     request
       .get(appConfig.LOCAL_API_HOST + '/api/search/' + searchString)
       .end(function(err, res) {
-        if(res.body && res.body.results) {
+        if(res.body && res.body.result) {
           self.trigger({
             searchString: searchString,
-            searchResults: res.body.results
+            searchResults: res.body.result
           })
         } else {
           self.trigger({

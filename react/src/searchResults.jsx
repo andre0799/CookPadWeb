@@ -17,9 +17,12 @@ var SearchResults = React.createClass({
 
   mixins: [reactAsync.Mixin, Reflux.ListenerMixin],
 
-  getInitialStateAsync: function(cb) {    
+  getInitialStateAsync: function(cb) { 
+
     appActions.searchUpdate(this.props.query)
     searchStore.listen(function(data) {
+      console.log('dataaaaa');
+      console.dir(data);
       try {
         return cb(null, {
           searchString: data.searchString,
@@ -49,18 +52,21 @@ var SearchResults = React.createClass({
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
+
       this.state.searchResults.forEach(function(game) {
-        if(game.image) {
-          var gameURL = '/game/' + game.id + '/' + slug(game.name)
+        if(game.imageUrl) {
+          var gameURL = '/game/' + game.id + '/' + slug(game.title);
           results.push(            
             <div key={game.id} className="search-result clearfix">
               <div className="search-image">
-                <Link href={gameURL}><img src={game.image.icon_url} alt={game.name} /></Link>
+                <Link href={gameURL}><img src={game.imageUrl} alt={game.title} /></Link>
               </div>
-              <h2 className="search-title"><Link href={gameURL}>{game.name}</Link></h2>
+              <h2 className="search-title"><Link href={gameURL}>{game.title}</Link></h2>
             </div>)
         }
       })
+      console.log('result!');
+      console.dir(results);
     } else {
       results.push(<div key="no-results" className="no-results">No Games Matching '{this.state.searchString}'</div>)
     }
