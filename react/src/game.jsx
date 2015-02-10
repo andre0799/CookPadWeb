@@ -67,7 +67,7 @@ var Game = React.createClass({
   render: function() {
     console.log('eita maluco');
     console.log(this.state.game);
-    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
       console.log('maluco passou');
       var relatedGames = []
       var self = this
@@ -95,11 +95,11 @@ var Game = React.createClass({
         <div key="game-detail" className="game-detail clearfix">
           <h1 ref="gameTitle" key="game-title" className="game-title">{this.state.game.title}</h1>
           <div key="game-info" className="game-info">
-            <p ref="gameDeck" key="game-deck">{this.state.game.deck}</p>
+            <p ref="gameDeck" key="game-deck">{this.state.game.ingredients}</p>
             {related}
           </div>
           <div key="game-image-container" className="game-image-container">
-            <img className="game-image" ref="gameImage" onLoad={this.confirmImageLoad} key="game-image" src={this.state.game.imageUrl} alt={this.state.game.name} />
+            <img className="game-image" ref="gameImage" onLoad={this.confirmImageLoad} key="game-image" src={this.state.game.imageUrl} alt={this.state.game.title} />
           </div>
         </div>
       </DocumentTitle>

@@ -67,7 +67,7 @@ var Game = React.createClass({displayName: "Game",
   render: function() {
     console.log('eita maluco');
     console.log(this.state.game);
-    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
       console.log('maluco passou');
       var relatedGames = []
       var self = this
@@ -95,11 +95,11 @@ var Game = React.createClass({displayName: "Game",
         React.createElement("div", {key: "game-detail", className: "game-detail clearfix"}, 
           React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.title), 
           React.createElement("div", {key: "game-info", className: "game-info"}, 
-            React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.deck), 
+            React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.ingredients), 
             related
           ), 
           React.createElement("div", {key: "game-image-container", className: "game-image-container"}, 
-            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.imageUrl, alt: this.state.game.name})
+            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.imageUrl, alt: this.state.game.title})
           )
         )
       )

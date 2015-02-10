@@ -14,7 +14,7 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var app = express()
-
+var searchedRecipes = {}
 
 app.use(logger('dev'))
 app.use(bodyParser.json())
@@ -39,48 +39,23 @@ app.get('/api/search/:query', function(req, res) {
   console.log(myQuery);
   request.get(appConfig.REMOTE_API_HOST + '/api/recipe/search.json?q='+myQuery+'&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7').end(function(data) {
     res.set('Content-Type', 'application/json')
-    console.log(data.body);
+    console.log('the data I need')
+    // console.log(data.body);
+    for (var i = 0; i < data.body.result.length; i++) {
+      // console.log(data.body.result[i]);
+      searchedRecipes[data.body.result[i].id] = data.body.result[i];
+    };
     res.send(data.body)
   })
 })
 
 app.get('/api/game/:game_id', function(req, res) {
   console.log('the id: '+req.params.game_id);
-
+  console.log(searchedRecipes);
     res.set('Content-Type', 'application/json')
-    res.send({results:{ type: 'recipe',
-       id: '4836445483171840',
-       title: 'Grilled Apricot Pork Chops',
-       story: '',
-       markup: [Object],
-       ingredients: [Object],
-       ingredientGroupNames: [Object],
-       annotatedDirections: [Object],
-       path: [],
-       categoryIds: [Object],
-       rating: 4.894737,
-       recipeId: 4836445483171840,
-       imageUrl: 'http://a3.picmix.net/5630479441068032',
-       created: '2013-12-09T02:12:44Z',
-       bookmarkCount: 1248,
-       commentCount: 19,
-       reviews: [Object],
-       forumThreadCount: 5,
-       threads: [Object],
-       markupCount: 9,
-       snapshotCount: 10,
-       snapshots: [Object],
-       previewUrl: '/grilled-apricot-pork-chops.html',
-       tags: [Object],
-       hasNutrition: false,
-       approved: true,
-       username: 'bbqtvtv.com',
-       userInfo: [Object] }}); 
-
-  // request.get(appConfig.REMOTE_API_HOST + '/api/game/' + req.params.game_id + '/?api_key=' + appConfig.GIANT_BOMB_API_KEY + '&format=json&field_list=name,image,id,similar_games,deck').end(function(data) {
-  //   res.set('Content-Type', 'application/json')
-  //   res.send(data.body)    
-  // })
+    console.log('searachedreceipes');
+    console.log({results: searchedRecipes['4836445483171840']});
+    res.send({results: searchedRecipes[req.params.game_id]});
 })
 
 
