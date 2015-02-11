@@ -24740,8 +24740,10 @@ var Recipe = React.createClass({displayName: "Recipe",
     if(this.state.recipe.ingredients && this.state.recipe.ingredients.length && this.state.recipe.ingredients[0]) {
       var relatedRecipes = []
       var self = this
+      var id_inc = 0;
       this.state.recipe.ingredients[0].forEach(function(recipe) {
-        var recipeKey = "related-" + recipe.id
+        var recipeKey = "related-" + id_inc
+        id_inc++;
         relatedRecipes.push(React.createElement("li", {key: recipeKey}, recipe.measure.amount+' '+recipe.measure.unit, " ", recipe.name))
       })
       var related = (
@@ -24865,7 +24867,7 @@ var Search = React.createClass({displayName: "Search",
   render: function() {
     var searchContext
     if(this.state.loading) {
-      searchContext = React.createElement("img", {className: "search-loading", src: "/images/si.gif"})
+      searchContext = React.createElement("img", {className: "search-loading", src: "/images/cookpad.png"})
     } else {
       searchContext = React.createElement("button", {className: "search-submit", type: "submit"}, "search")
     }

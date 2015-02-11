@@ -68,8 +68,10 @@ var Recipe = React.createClass({displayName: "Recipe",
     if(this.state.recipe.ingredients && this.state.recipe.ingredients.length && this.state.recipe.ingredients[0]) {
       var relatedRecipes = []
       var self = this
+      var id_inc = 0;
       this.state.recipe.ingredients[0].forEach(function(recipe) {
-        var recipeKey = "related-" + recipe.id
+        var recipeKey = "related-" + id_inc
+        id_inc++;
         relatedRecipes.push(React.createElement("li", {key: recipeKey}, recipe.measure.amount+' '+recipe.measure.unit, " ", recipe.name))
       })
       var related = (

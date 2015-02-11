@@ -86,7 +86,7 @@ var Search = React.createClass({displayName: "Search",
   render: function() {
     var searchContext
     if(this.state.loading) {
-      searchContext = React.createElement("img", {className: "search-loading", src: "/images/si.gif"})
+      searchContext = React.createElement("img", {className: "search-loading", src: "/images/cookpad.png"})
     } else {
       searchContext = React.createElement("button", {className: "search-submit", type: "submit"}, "search")
     }
