@@ -34,15 +34,10 @@ app.all('*', function(req, res, next) {
 // /api/recipe/search.json?q=pork+chops&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7
 
 app.get('/api/search/:query', function(req, res) {
-  console.log('Busca!!! '+ req.params.query);
   var myQuery = req.params.query.replace(' '+'+');
-  console.log(myQuery);
   request.get(appConfig.REMOTE_API_HOST + '/api/recipe/search.json?q='+myQuery+'&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7').end(function(data) {
     res.set('Content-Type', 'application/json')
-    console.log('the data I need')
-    // console.log(data.body);
     for (var i = 0; i < data.body.result.length; i++) {
-      // console.log(data.body.result[i]);
       searchedRecipes[data.body.result[i].id] = data.body.result[i];
     };
     res.send(data.body)
@@ -50,12 +45,20 @@ app.get('/api/search/:query', function(req, res) {
 })
 
 app.get('/api/game/:game_id', function(req, res) {
-  console.log('the id: '+req.params.game_id);
-  console.log(searchedRecipes);
-    res.set('Content-Type', 'application/json')
-    console.log('searachedreceipes');
-    console.log({results: searchedRecipes['4836445483171840']});
-    res.send({results: searchedRecipes[req.params.game_id]});
+  if(req.params.game_id){
+    res.set('Content-Type', 'application/json');
+    if(searchedRecipes[req.params.game_id]){
+      res.send({results: searchedRecipes[req.params.game_id]});
+    }else{
+      request.get(appConfig.REMOTE_API_HOST + '/api/recipe/get.json?recipeId='+req.params.game_id).end(function(data) {
+        res.set('Content-Type', 'application/json');
+       
+        res.send({results:data.body.result});
+      })
+    }
+   }else{
+    //page not found
+   } 
 })
 
 

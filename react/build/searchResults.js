@@ -21,8 +21,6 @@ var SearchResults = React.createClass({displayName: "SearchResults",
 
     appActions.searchUpdate(this.props.query)
     searchStore.listen(function(data) {
-      console.log('dataaaaa');
-      console.dir(data);
       try {
         return cb(null, {
           searchString: data.searchString,
@@ -65,8 +63,6 @@ var SearchResults = React.createClass({displayName: "SearchResults",
             ))
         }
       })
-      console.log('result!');
-      console.dir(results);
     } else {
       results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Games Matching '", this.state.searchString, "'"))
     }

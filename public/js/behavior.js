@@ -24722,15 +24722,10 @@ var Game = React.createClass({displayName: "Game",
   },
 
   render: function() {
-    console.log('eita maluco');
-    console.log(this.state.game);
     if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
-      console.log('maluco passou');
       var relatedGames = []
       var self = this
       this.state.game.ingredients.forEach(function(game) {
-        console.log('related');
-        console.log(game);
         var gameURI = self.getURI(game.id, game.title)
         var gameKey = "related-" + game.id
         relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.title)))
@@ -24914,8 +24909,6 @@ var SearchResults = React.createClass({displayName: "SearchResults",
 
     appActions.searchUpdate(this.props.query)
     searchStore.listen(function(data) {
-      console.log('dataaaaa');
-      console.dir(data);
       try {
         return cb(null, {
           searchString: data.searchString,
@@ -24958,8 +24951,6 @@ var SearchResults = React.createClass({displayName: "SearchResults",
             ))
         }
       })
-      console.log('result!');
-      console.dir(results);
     } else {
       results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Games Matching '", this.state.searchString, "'"))
     }
@@ -24995,10 +24986,6 @@ var gameStore = Reflux.createStore({
   },
 
   loadGameData: function() {
-    console.log('search2');
-    console.log(arguments[0]);
-    console.dir(this.gameData);
-    console.log('end');
 
     var gameId = arguments[0]
     if(this.gameData[gameId]) {
@@ -25008,11 +24995,7 @@ var gameStore = Reflux.createStore({
       request
         .get(appConfig.LOCAL_API_HOST + '/api/game/' + gameId)
         .end(function(err, res) {
-          console.log('le sapohaa!');
-          console.dir(res.body);
           if(res.body && res.body.results) {
-            console.log('my body result');
-            console.log(res.body.results);
             self.gameData[gameId] = res.body.results
             self.trigger(res.body.results)
           }

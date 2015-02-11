@@ -13,10 +13,6 @@ var gameStore = Reflux.createStore({
   },
 
   loadGameData: function() {
-    console.log('search2');
-    console.log(arguments[0]);
-    console.dir(this.gameData);
-    console.log('end');
 
     var gameId = arguments[0]
     if(this.gameData[gameId]) {
@@ -26,11 +22,7 @@ var gameStore = Reflux.createStore({
       request
         .get(appConfig.LOCAL_API_HOST + '/api/game/' + gameId)
         .end(function(err, res) {
-          console.log('le sapohaa!');
-          console.dir(res.body);
           if(res.body && res.body.results) {
-            console.log('my body result');
-            console.log(res.body.results);
             self.gameData[gameId] = res.body.results
             self.trigger(res.body.results)
           }

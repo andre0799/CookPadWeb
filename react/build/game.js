@@ -65,15 +65,10 @@ var Game = React.createClass({displayName: "Game",
   },
 
   render: function() {
-    console.log('eita maluco');
-    console.log(this.state.game);
     if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
-      console.log('maluco passou');
       var relatedGames = []
       var self = this
       this.state.game.ingredients.forEach(function(game) {
-        console.log('related');
-        console.log(game);
         var gameURI = self.getURI(game.id, game.title)
         var gameKey = "related-" + game.id
         relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.title)))
