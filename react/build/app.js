@@ -39,6 +39,7 @@ var App = React.createClass({displayName: "App",
         React.createElement("head", null, 
           React.createElement("title", null, "%react-iso-vgs%"), 
           React.createElement("meta", {charSet: "UTF-8"}), 
+          React.createElement("link", {href: "http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900", rel: "stylesheet", type: "text/css"}), 
           React.createElement("link", {href: "http://fonts.googleapis.com/css?family=Merriweather+Sans:800", rel: "stylesheet", type: "text/css"}), 
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css"}), 
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "/css/style.css"})

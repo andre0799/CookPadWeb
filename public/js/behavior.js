@@ -40,6 +40,7 @@ var App = React.createClass({displayName: "App",
         React.createElement("head", null, 
           React.createElement("title", null, "%react-iso-vgs%"), 
           React.createElement("meta", {charSet: "UTF-8"}), 
+          React.createElement("link", {href: "http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900", rel: "stylesheet", type: "text/css"}), 
           React.createElement("link", {href: "http://fonts.googleapis.com/css?family=Merriweather+Sans:800", rel: "stylesheet", type: "text/css"}), 
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css"}), 
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "/css/style.css"})
@@ -24650,8 +24651,7 @@ module.exports = appActions
 },{"reflux":191}],218:[function(require,module,exports){
 module.exports = {
   LOCAL_API_HOST: 'http://localhost:4000',
-  REMOTE_API_HOST: 'api.allthecooks.com',
-  GIANT_BOMB_API_KEY: '966f78bbd84fb51dcc37c4d125bddd5148401b5f' // please change
+  REMOTE_API_HOST: 'api.allthecooks.com'
 }
 },{}],219:[function(require,module,exports){
 /** @jsx React.DOM */

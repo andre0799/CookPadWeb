@@ -39,6 +39,7 @@ var App = React.createClass({
         <head>
           <title>%react-iso-vgs%</title>
           <meta charSet="UTF-8" />
+          <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900' rel='stylesheet' type='text/css'/>
           <link href="http://fonts.googleapis.com/css?family=Merriweather+Sans:800" rel="stylesheet" type="text/css" />
           <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css" />
           <link rel="stylesheet" type="text/css" href="/css/style.css" />
