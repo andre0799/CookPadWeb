@@ -56,8 +56,8 @@ var Game = React.createClass({
   },
 
   refreshGame: function(data) {
-    if(typeof(window) !== 'undefined' && this.props.game_slug != slug(data.name)) {
-      window.location = this.getURI(data.id, data.name)
+    if(typeof(window) !== 'undefined' && this.props.game_slug != slug(data.title)) {
+      window.location = this.getURI(data.id, data.title)
     } 
     this.setState({
       game: data

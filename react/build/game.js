@@ -29,6 +29,9 @@ var Game = React.createClass({displayName: "Game",
   },
 
   componentDidMount: function() {
+    console.log('My debugg');
+    console.log(this.refreshGame);
+    console.log(gameStore);
     this.listenTo(gameStore, this.refreshGame)
     appActions.loadGame(this.props.game_id)
   },
@@ -56,8 +59,8 @@ var Game = React.createClass({displayName: "Game",
   },
 
   refreshGame: function(data) {
-    if(typeof(window) !== 'undefined' && this.props.game_slug != slug(data.name)) {
-      window.location = this.getURI(data.id, data.name)
+    if(typeof(window) !== 'undefined' && this.props.game_slug != slug(data.title)) {
+      window.location = this.getURI(data.id, data.title)
     } 
     this.setState({
       game: data
