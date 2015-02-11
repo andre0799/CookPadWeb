@@ -8,7 +8,7 @@ var DocumentTitle = require('react-document-title')
 
 var Search = require('./search')
 var SearchResults = require('./searchResults')
-var Game = require('./game')
+var Recipe = require('./recipe')
 var Home = require('./home')
 
 var Locations = Router.Locations
@@ -30,7 +30,7 @@ var App = React.createClass({displayName: "App",
     }    
   },
 
-  searchGames: function(query) {
+  searchRecipes: function(query) {
     this.refs.router.navigate('/search/' + encodeURI(query))
   },
 
@@ -45,13 +45,12 @@ var App = React.createClass({displayName: "App",
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "/css/style.css"})
         ), 
         React.createElement("body", null, 
-        React.createElement("a", {href: "https://github.com/chadpaulson/react-isomorphic-video-game-search"}, React.createElement("img", {className: "github-ribbon", src: "https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67", alt: "Fork me on GitHub", "data-canonical-src": "https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"})), 
-        React.createElement(Search, {onSearch: this.searchGames, entryPath: this.state.entryPath}), 
+        React.createElement(Search, {onSearch: this.searchRecipes, entryPath: this.state.entryPath}), 
         React.createElement(DocumentTitle, {title: "%react-iso-vgs%"}, 
         React.createElement(CaptureClicks, null, 
           React.createElement(Locations, {ref: "router", path: this.props.path}, 
             React.createElement(Location, {path: "/", handler: Home}), 
-            React.createElement(Location, {path: "/game/:game_id/:game_slug", handler: Game}), 
+            React.createElement(Location, {path: "/recipe/:recipe_id/:recipe_slug", handler: Recipe}), 
             React.createElement(Location, {path: "/search/:query", handler: SearchResults})
           )
         )
@@ -78,7 +77,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-},{"./game":219,"./home":220,"./search":221,"./searchResults":222,"react-document-title":8,"react-router-component":9,"react-router-component/lib/CaptureClicks":11,"react/addons":29}],2:[function(require,module,exports){
+},{"./home":219,"./recipe":220,"./search":221,"./searchResults":222,"react-document-title":8,"react-router-component":9,"react-router-component/lib/CaptureClicks":11,"react/addons":29}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -24643,7 +24642,7 @@ var Reflux = require('reflux')
 
 var appActions = Reflux.createActions([
   'searchUpdate',
-  'loadGame'
+  'loadRecipe'
 ])
 
 module.exports = appActions
@@ -24659,6 +24658,22 @@ module.exports = {
 'use strict'
 
 var React = require('react/addons')
+var DocumentTitle = require('react-document-title')
+
+var Home = React.createClass({displayName: "Home",
+
+  render: function() {
+    return (React.createElement(DocumentTitle, {title: "React Isomorphic Video Recipe Search"}))
+  }
+
+})
+
+module.exports = Home
+},{"react-document-title":8,"react/addons":29}],220:[function(require,module,exports){
+/** @jsx React.DOM */
+'use strict'
+
+var React = require('react/addons')
 var Reflux = require('reflux')
 var slug = require('to-slug-case')
 var reactAsync = require('react-async')
@@ -24667,79 +24682,74 @@ var DocumentTitle = require('react-document-title')
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 var appActions = require('./actions')
-var gameStore = require('./stores/gameStore')
+var recipeStore = require('./stores/recipeStore')
 
 
-var Game = React.createClass({displayName: "Game",
+var Recipe = React.createClass({displayName: "Recipe",
 
   mixins: [reactAsync.Mixin, Reflux.ListenerMixin],
 
   getInitialStateAsync: function(cb) {
-    appActions.loadGame(this.props.game_id)
-    gameStore.listen(function(data) {
+    appActions.loadRecipe(this.props.recipe_id)
+    recipeStore.listen(function(data) {
       try {
         return cb(null, {
-          game: data
+          recipe: data
         })
       } catch(err) { }
     })
   },
 
   componentDidMount: function() {
-    this.listenTo(gameStore, this.refreshGame)
-    appActions.loadGame(this.props.game_id)
+    this.listenTo(recipeStore, this.refreshRecipe)
+    appActions.loadRecipe(this.props.recipe_id)
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if(typeof(nextProps.game_id) !== "undefined") {
-      appActions.loadGame(nextProps.game_id)
+    if(typeof(nextProps.recipe_id) !== "undefined") {
+      appActions.loadRecipe(nextProps.recipe_id)
     }
   },
 
-  getURI: function(game_id, game_name) {
-    return '/game/' + game_id + '/' + slug(game_name)
+  getURI: function(recipe_id, recipe_name) {
+    return '/recipe/' + recipe_id + '/' + slug(recipe_name)
   },
 
   beginImageLoad: function() {
-    this.refs.gameImage.getDOMNode().className += ' hide'
-    this.refs.gameTitle.getDOMNode().className += ' hide'
-    this.refs.gameDeck.getDOMNode().className += ' hide'
+    this.refs.recipeImage.getDOMNode().className += ' hide'
+    this.refs.recipeTitle.getDOMNode().className += ' hide'
+    this.refs.recipeDeck.getDOMNode().className += ' hide'
   },
 
   confirmImageLoad: function() {
-    this.refs.gameImage.getDOMNode().className = 'game-image'
-    this.refs.gameTitle.getDOMNode().className = 'game-title'
-    this.refs.gameDeck.getDOMNode().className = ''
+    this.refs.recipeImage.getDOMNode().className = 'recipe-image'
+    this.refs.recipeTitle.getDOMNode().className = 'recipe-title'
+    this.refs.recipeDeck.getDOMNode().className = ''
   },
 
-  refreshGame: function(data) {
-    if(typeof(window) !== 'undefined' && this.props.game_slug != slug(data.title)) {
+  refreshRecipe: function(data) {
+    if(typeof(window) !== 'undefined' && this.props.recipe_slug != slug(data.title)) {
       window.location = this.getURI(data.id, data.title)
     } 
     this.setState({
-      game: data
+      recipe: data
     })
   },
 
   render: function() {
-    console.log('loaded recipe');
-    console.log(this.state.game);
-    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
-      console.log('it has ingredients');
-      var relatedGames = []
+    if(this.state.recipe.ingredients && this.state.recipe.ingredients.length && this.state.recipe.ingredients[0]) {
+      var relatedRecipes = []
       var self = this
-      this.state.game.ingredients[0].forEach(function(game) {
-        console.log('each ingredient');
-        console.log(game);
-        var gameKey = "related-" + game.id
-        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.measure.amount+' '+game.measure.unit, " ", game.name)))
+      this.state.recipe.ingredients[0].forEach(function(recipe) {
+        var recipeKey = "related-" + recipe.id
+        relatedRecipes.push(React.createElement("li", {key: recipeKey}, recipe.measure.amount+' '+recipe.measure.unit, " ", recipe.name))
       })
       var related = (
-        React.createElement("div", {key: "game-related", className: "game-related"}, 
+        React.createElement("div", {key: "recipe-related", className: "recipe-related"}, 
           React.createElement("h3", null, "Ingredients"), 
           
             React.createElement(ReactCSSTransitionGroup, {component: "ul", transitionName: "css-transition"}, 
-              relatedGames
+              relatedRecipes
             )
           
         ))
@@ -24747,15 +24757,15 @@ var Game = React.createClass({displayName: "Game",
       var related = null
     }
     return (
-      React.createElement(DocumentTitle, {title: this.state.game.title}, 
-        React.createElement("div", {key: "game-detail", className: "game-detail clearfix"}, 
-          React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.title), 
-          React.createElement("div", {key: "game-info", className: "game-info"}, 
-            React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.story), 
+      React.createElement(DocumentTitle, {title: this.state.recipe.title}, 
+        React.createElement("div", {key: "recipe-detail", className: "recipe-detail clearfix"}, 
+          React.createElement("h1", {ref: "recipeTitle", key: "recipe-title", className: "recipe-title"}, this.state.recipe.title), 
+          React.createElement("div", {key: "recipe-info", className: "recipe-info"}, 
+            React.createElement("p", {ref: "recipeDeck", key: "recipe-deck"}, this.state.recipe.story), 
             related
           ), 
-          React.createElement("div", {key: "game-image-container", className: "game-image-container"}, 
-            React.createElement("img", {className: "game-image", ref: "gameImage", onLoad: this.confirmImageLoad, key: "game-image", src: this.state.game.imageUrl, alt: this.state.game.title})
+          React.createElement("div", {key: "recipe-image-container", className: "recipe-image-container"}, 
+            React.createElement("img", {className: "recipe-image", ref: "recipeImage", onLoad: this.confirmImageLoad, key: "recipe-image", src: this.state.recipe.imageUrl, alt: this.state.recipe.title})
           )
         )
       )
@@ -24765,24 +24775,8 @@ var Game = React.createClass({displayName: "Game",
 })
 
 
-module.exports = Game
-},{"./actions":217,"./stores/gameStore":223,"react-async":3,"react-document-title":8,"react-router-component":9,"react/addons":29,"reflux":191,"to-slug-case":214}],220:[function(require,module,exports){
-/** @jsx React.DOM */
-'use strict'
-
-var React = require('react/addons')
-var DocumentTitle = require('react-document-title')
-
-var Home = React.createClass({displayName: "Home",
-
-  render: function() {
-    return (React.createElement(DocumentTitle, {title: "React Isomorphic Video Game Search"}))
-  }
-
-})
-
-module.exports = Home
-},{"react-document-title":8,"react/addons":29}],221:[function(require,module,exports){
+module.exports = Recipe
+},{"./actions":217,"./stores/recipeStore":223,"react-async":3,"react-document-title":8,"react-router-component":9,"react/addons":29,"reflux":191,"to-slug-case":214}],221:[function(require,module,exports){
 /** @jsx React.DOM */
 'use strict'
 
@@ -24878,7 +24872,7 @@ var Search = React.createClass({displayName: "Search",
     return (
       React.createElement("div", {className: this.state.defaultClass}, 
         React.createElement("form", {method: "get", action: "/", className: "search-form", onSubmit: this.handleSubmit}, 
-          React.createElement("input", {placeholder: "Mario Kart", type: "text", ref: "search", className: "search-input", name: "q", onChange: this.handleChange, onClick: this.handleClick, onBlur: this.handleBlur, value: this.state.searchString}), 
+          React.createElement("input", {placeholder: "Pulled Pork", type: "text", ref: "search", className: "search-input", name: "q", onChange: this.handleChange, onClick: this.handleClick, onBlur: this.handleBlur, value: this.state.searchString}), 
           searchContext
         )
       )
@@ -24943,20 +24937,20 @@ var SearchResults = React.createClass({displayName: "SearchResults",
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
 
-      this.state.searchResults.forEach(function(game) {
-        if(game.imageUrl) {
-          var gameURL = '/game/' + game.id + '/' + slug(game.title);
+      this.state.searchResults.forEach(function(recipe) {
+        if(recipe.imageUrl) {
+          var recipeURL = '/recipe/' + recipe.id + '/' + slug(recipe.title);
           results.push(            
-            React.createElement("div", {key: game.id, className: "search-result clearfix"}, 
+            React.createElement("div", {key: recipe.id, className: "search-result clearfix"}, 
               React.createElement("div", {className: "search-image"}, 
-                React.createElement(Link, {href: gameURL}, React.createElement("img", {src: game.imageUrl, alt: game.title}))
+                React.createElement(Link, {href: recipeURL}, React.createElement("img", {src: recipe.imageUrl, alt: recipe.title}))
               ), 
-              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: gameURL}, game.title))
+              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: recipeURL}, recipe.title))
             ))
         }
       })
     } else {
-      results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Games Matching '", this.state.searchString, "'"))
+      results.push(React.createElement("div", {key: "no-results", className: "no-results"}, "No Recipes Matching '", this.state.searchString, "'"))
     }
     var searchTitle = 'Search: ' + this.state.searchString
     return (
@@ -24982,25 +24976,25 @@ var appConfig = require('./../config')
 var appActions = require('./../actions')
 
 
-var gameStore = Reflux.createStore({
+var recipeStore = Reflux.createStore({
 
   init: function() {
-    this.gameData = {}
-    this.listenTo(appActions.loadGame, this.loadGameData)
+    this.recipeData = {}
+    this.listenTo(appActions.loadRecipe, this.loadRecipeData)
   },
 
-  loadGameData: function() {
+  loadRecipeData: function() {
 
-    var gameId = arguments[0]
-    if(this.gameData[gameId]) {
-      this.trigger(this.gameData[gameId])
+    var recipeId = arguments[0]
+    if(this.recipeData[recipeId]) {
+      this.trigger(this.recipeData[recipeId])
     } else {
       var self = this
       request
-        .get(appConfig.LOCAL_API_HOST + '/api/game/' + gameId)
+        .get(appConfig.LOCAL_API_HOST + '/api/recipe/' + recipeId)
         .end(function(err, res) {
           if(res.body && res.body.results) {
-            self.gameData[gameId] = res.body.results
+            self.recipeData[recipeId] = res.body.results
             self.trigger(res.body.results)
           }
       })
@@ -25009,7 +25003,7 @@ var gameStore = Reflux.createStore({
 
 })
 
-module.exports = gameStore
+module.exports = recipeStore
 },{"./../actions":217,"./../config":218,"reflux":191,"superagent":211}],224:[function(require,module,exports){
 var Reflux = require('reflux')
 var request = require('superagent')

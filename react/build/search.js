@@ -93,7 +93,7 @@ var Search = React.createClass({displayName: "Search",
     return (
       React.createElement("div", {className: this.state.defaultClass}, 
         React.createElement("form", {method: "get", action: "/", className: "search-form", onSubmit: this.handleSubmit}, 
-          React.createElement("input", {placeholder: "Mario Kart", type: "text", ref: "search", className: "search-input", name: "q", onChange: this.handleChange, onClick: this.handleClick, onBlur: this.handleBlur, value: this.state.searchString}), 
+          React.createElement("input", {placeholder: "Pulled Pork", type: "text", ref: "search", className: "search-input", name: "q", onChange: this.handleChange, onClick: this.handleClick, onBlur: this.handleBlur, value: this.state.searchString}), 
           searchContext
         )
       )

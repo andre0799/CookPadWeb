@@ -2,7 +2,7 @@ var Reflux = require('reflux')
 
 var appActions = Reflux.createActions([
   'searchUpdate',
-  'loadGame'
+  'loadRecipe'
 ])
 
 module.exports = appActions

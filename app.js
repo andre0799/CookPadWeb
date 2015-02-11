@@ -44,13 +44,13 @@ app.get('/api/search/:query', function(req, res) {
   })
 })
 
-app.get('/api/game/:game_id', function(req, res) {
-  if(req.params.game_id){
+app.get('/api/recipe/:recipe_id', function(req, res) {
+  if(req.params.recipe_id){
     res.set('Content-Type', 'application/json');
-    if(searchedRecipes[req.params.game_id]){
-      res.send({results: searchedRecipes[req.params.game_id]});
+    if(searchedRecipes[req.params.recipe_id]){
+      res.send({results: searchedRecipes[req.params.recipe_id]});
     }else{
-      request.get(appConfig.REMOTE_API_HOST + '/api/recipe/get.json?recipeId='+req.params.game_id).end(function(data) {
+      request.get(appConfig.REMOTE_API_HOST + '/api/recipe/get.json?recipeId='+req.params.recipe_id).end(function(data) {
         res.set('Content-Type', 'application/json');
        
         res.send({results:data.body.result});

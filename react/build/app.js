@@ -7,7 +7,7 @@ var DocumentTitle = require('react-document-title')
 
 var Search = require('./search')
 var SearchResults = require('./searchResults')
-var Game = require('./game')
+var Recipe = require('./recipe')
 var Home = require('./home')
 
 var Locations = Router.Locations
@@ -29,7 +29,7 @@ var App = React.createClass({displayName: "App",
     }    
   },
 
-  searchGames: function(query) {
+  searchRecipes: function(query) {
     this.refs.router.navigate('/search/' + encodeURI(query))
   },
 
@@ -44,13 +44,12 @@ var App = React.createClass({displayName: "App",
           React.createElement("link", {rel: "stylesheet", type: "text/css", href: "/css/style.css"})
         ), 
         React.createElement("body", null, 
-        React.createElement("a", {href: "https://github.com/chadpaulson/react-isomorphic-video-game-search"}, React.createElement("img", {className: "github-ribbon", src: "https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67", alt: "Fork me on GitHub", "data-canonical-src": "https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"})), 
-        React.createElement(Search, {onSearch: this.searchGames, entryPath: this.state.entryPath}), 
+        React.createElement(Search, {onSearch: this.searchRecipes, entryPath: this.state.entryPath}), 
         React.createElement(DocumentTitle, {title: "%react-iso-vgs%"}, 
         React.createElement(CaptureClicks, null, 
           React.createElement(Locations, {ref: "router", path: this.props.path}, 
             React.createElement(Location, {path: "/", handler: Home}), 
-            React.createElement(Location, {path: "/game/:game_id/:game_slug", handler: Game}), 
+            React.createElement(Location, {path: "/recipe/:recipe_id/:recipe_slug", handler: Recipe}), 
             React.createElement(Location, {path: "/search/:query", handler: SearchResults})
           )
         )

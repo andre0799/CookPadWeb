@@ -266,14 +266,14 @@ input {
   float: right;
 }
 
-.game-detail {
+.recipe-detail {
   position: relative;
   width: 90%;
   height: 740px;
   margin: 140px auto 0;
 }
 
-.game-info {
+.recipe-info {
   position: relative;
   float: left;
   width: 60%;
@@ -284,16 +284,16 @@ input {
   margin: 150px 0 0 1.5%;
 }
 
-.game-info p {
+.recipe-info p {
   border-bottom: 1px solid rgb(223, 223, 223);
   padding-bottom:40px;
 }
 
-.game-related {
+.recipe-related {
   margin-top:40px;
 }
 
-.game-title {
+.recipe-title {
   position: absolute;
   top: 46px;
   left: 1.5%;
@@ -306,7 +306,7 @@ input {
   webkit-transition: opacity .3s ease;  
 }
 
-.game-image-container {
+.recipe-image-container {
   position: absolute;
   top: 46px;
   right: 1.5%;
@@ -315,7 +315,7 @@ input {
   height: 547px;
 }
 
-.game-image {
+.recipe-image {
   max-width: 100%;
   height:auto;
   opacity: 1;
