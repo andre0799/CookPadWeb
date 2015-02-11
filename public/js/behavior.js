@@ -24686,9 +24686,6 @@ var Game = React.createClass({displayName: "Game",
   },
 
   componentDidMount: function() {
-    console.log('My debugg');
-    console.log(this.refreshGame);
-    console.log(gameStore);
     this.listenTo(gameStore, this.refreshGame)
     appActions.loadGame(this.props.game_id)
   },
@@ -24725,17 +24722,21 @@ var Game = React.createClass({displayName: "Game",
   },
 
   render: function() {
-    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
+    console.log('loaded recipe');
+    console.log(this.state.game);
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
+      console.log('it has ingredients');
       var relatedGames = []
       var self = this
-      this.state.game.ingredients.forEach(function(game) {
-        var gameURI = self.getURI(game.id, game.title)
+      this.state.game.ingredients[0].forEach(function(game) {
+        console.log('each ingredient');
+        console.log(game);
         var gameKey = "related-" + game.id
-        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.title)))
+        relatedGames.push(React.createElement("li", {key: gameKey}, React.createElement(Link, {onClick: self.beginImageLoad, href: "#"}, game.measure.amount+' '+game.measure.unit, " ", game.name)))
       })
       var related = (
         React.createElement("div", {key: "game-related", className: "game-related"}, 
-          React.createElement("h3", null, "Similar Games"), 
+          React.createElement("h3", null, "Ingredients"), 
           
             React.createElement(ReactCSSTransitionGroup, {component: "ul", transitionName: "css-transition"}, 
               relatedGames
@@ -24750,7 +24751,7 @@ var Game = React.createClass({displayName: "Game",
         React.createElement("div", {key: "game-detail", className: "game-detail clearfix"}, 
           React.createElement("h1", {ref: "gameTitle", key: "game-title", className: "game-title"}, this.state.game.title), 
           React.createElement("div", {key: "game-info", className: "game-info"}, 
-            React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.ingredients), 
+            React.createElement("p", {ref: "gameDeck", key: "game-deck"}, this.state.game.story), 
             related
           ), 
           React.createElement("div", {key: "game-image-container", className: "game-image-container"}, 

@@ -65,17 +65,16 @@ var Game = React.createClass({
   },
 
   render: function() {
-    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0] && false) {
+    if(this.state.game.ingredients && this.state.game.ingredients.length && this.state.game.ingredients[0]) {
       var relatedGames = []
       var self = this
-      this.state.game.ingredients.forEach(function(game) {
-        var gameURI = self.getURI(game.id, game.title)
+      this.state.game.ingredients[0].forEach(function(game) {
         var gameKey = "related-" + game.id
-        relatedGames.push(<li key={gameKey}><Link onClick={self.beginImageLoad} href='#'>{game.title}</Link></li>)
+        relatedGames.push(<li key={gameKey}><Link onClick={self.beginImageLoad} href='#'>{game.measure.amount+' '+game.measure.unit} {game.name}</Link></li>)
       })
       var related = (
         <div key="game-related" className="game-related">
-          <h3>Similar Games</h3>
+          <h3>Ingredients</h3>
           
             <ReactCSSTransitionGroup component="ul" transitionName="css-transition">
               {relatedGames}
@@ -90,7 +89,7 @@ var Game = React.createClass({
         <div key="game-detail" className="game-detail clearfix">
           <h1 ref="gameTitle" key="game-title" className="game-title">{this.state.game.title}</h1>
           <div key="game-info" className="game-info">
-            <p ref="gameDeck" key="game-deck">{this.state.game.ingredients}</p>
+            <p ref="gameDeck" key="game-deck">{this.state.game.story}</p>
             {related}
           </div>
           <div key="game-image-container" className="game-image-container">
