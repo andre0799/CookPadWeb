@@ -1,5 +1,5 @@
 module.exports = {
-  LOCAL_API_HOST: 'https://cookpad-web-demo.herokuapp.com/',
+  LOCAL_API_HOST: 'https://cookpad-web-demo.herokuapp.com',
   REMOTE_API_HOST: 'api.allthecooks.com'
 }
 
