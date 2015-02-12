@@ -3,5 +3,5 @@ module.exports = {
   REMOTE_API_HOST: 'api.allthecooks.com'
 }
 
-//https://cookpad-web-demo.herokuapp.com/
+//https://cookpad-web-demo.herokuapp.com/  --heroku
 //http://localhost:4000
