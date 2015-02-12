@@ -13,11 +13,15 @@ var recipeStore = Reflux.createStore({
   },
 
   loadRecipeData: function() {
-
+    console.log('loadRecipeData dentro de recipeStore');
     var recipeId = arguments[0]
+    console.log('find this shit');
+    console.dir(searchedRecipes);
     if(this.recipeData[recipeId]) {
+      console.log('contains');
       this.trigger(this.recipeData[recipeId])
     } else {
+      console.log('doesnt contain');
       var self = this
       request
         .get(appConfig.LOCAL_API_HOST + '/api/recipe/' + recipeId)

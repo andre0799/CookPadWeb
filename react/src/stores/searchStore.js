@@ -12,6 +12,7 @@ var searchStore = Reflux.createStore({
   },
 
   handleSearchUpdate: function() {
+    console.log('handleSearchUpdate dentro de recipeStore');
     var self = this
     var searchString = arguments[0]
     request

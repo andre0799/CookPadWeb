@@ -24653,6 +24653,8 @@ module.exports = {
   LOCAL_API_HOST: 'http://localhost:4000',
   REMOTE_API_HOST: 'api.allthecooks.com'
 }
+
+//https://cookpad-demo.herokuapp.com
 },{}],219:[function(require,module,exports){
 /** @jsx React.DOM */
 'use strict'
@@ -24986,11 +24988,15 @@ var recipeStore = Reflux.createStore({
   },
 
   loadRecipeData: function() {
-
+    console.log('loadRecipeData dentro de recipeStore');
     var recipeId = arguments[0]
+    console.log('find this shit');
+    console.dir(searchedRecipes);
     if(this.recipeData[recipeId]) {
+      console.log('contains');
       this.trigger(this.recipeData[recipeId])
     } else {
+      console.log('doesnt contain');
       var self = this
       request
         .get(appConfig.LOCAL_API_HOST + '/api/recipe/' + recipeId)
@@ -25021,6 +25027,7 @@ var searchStore = Reflux.createStore({
   },
 
   handleSearchUpdate: function() {
+    console.log('handleSearchUpdate dentro de recipeStore');
     var self = this
     var searchString = arguments[0]
     request
