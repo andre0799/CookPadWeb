@@ -14,6 +14,8 @@ var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var app = express()
+
+var reactApp = require('./react/src/app.jsx')
 var searchedRecipes = {}
 
 app.use(logger('dev'))
@@ -31,10 +33,8 @@ app.all('*', function(req, res, next) {
 
 
  
-// /api/recipe/search.json?q=pork+chops&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7
-
 app.get('/api/search/:query', function(req, res) {
-  console.log('/api/search/:query dentro de app.js');
+  // console.log('/api/search/:query dentro de app.js');
   var myQuery = req.params.query.replace(' '+'+');
   request.get(appConfig.REMOTE_API_HOST + '/api/recipe/search.json?q='+myQuery+'&filter=title%2Cingredients%2Cdirections&ordering=relevance&size=10&start=0&v=7').end(function(data) {
     res.set('Content-Type', 'application/json')
@@ -46,7 +46,7 @@ app.get('/api/search/:query', function(req, res) {
 })
 
 app.get('/api/recipe/:recipe_id', function(req, res) {
-  console.log('/api/recipe/:recipe_id dentro de app.js');
+  // console.log('/api/recipe/:recipe_id dentro de app.js');
   if(req.params.recipe_id){
     res.set('Content-Type', 'application/json');
     if(searchedRecipes[req.params.recipe_id]){

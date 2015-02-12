@@ -47,6 +47,10 @@ var SearchResults = React.createClass({displayName: "SearchResults",
     })
   },
 
+  clicked:function(index){
+    
+  },
+
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
@@ -59,7 +63,7 @@ var SearchResults = React.createClass({displayName: "SearchResults",
               React.createElement("div", {className: "search-image"}, 
                 React.createElement(Link, {href: recipeURL}, React.createElement("img", {src: recipe.imageUrl, alt: recipe.title}))
               ), 
-              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: recipeURL}, recipe.title))
+              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: recipeURL, recipe: recipe}, recipe.title))
             ))
         }
       })

@@ -809,6 +809,7 @@ var NavigatableMixin  = require('./NavigatableMixin');
 var Environment       = require('./environment');
 var assign            = Object.assign || require('object.assign');
 
+var searchStore = require('../../../react/src/stores/searchStore')
 /**
  * Link.
  *
@@ -885,7 +886,7 @@ var Link = React.createClass({
 
 module.exports = Link;
 
-},{"./NavigatableMixin":13,"./environment":22,"object.assign":24,"react":190}],13:[function(require,module,exports){
+},{"../../../react/src/stores/searchStore":227,"./NavigatableMixin":13,"./environment":22,"object.assign":24,"react":190}],13:[function(require,module,exports){
 "use strict";
 
 var React       = require('react');
@@ -24937,6 +24938,10 @@ var SearchResults = React.createClass({displayName: "SearchResults",
     })
   },
 
+  clicked:function(index){
+    
+  },
+
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
@@ -24949,7 +24954,7 @@ var SearchResults = React.createClass({displayName: "SearchResults",
               React.createElement("div", {className: "search-image"}, 
                 React.createElement(Link, {href: recipeURL}, React.createElement("img", {src: recipe.imageUrl, alt: recipe.title}))
               ), 
-              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: recipeURL}, recipe.title))
+              React.createElement("h2", {className: "search-title"}, React.createElement(Link, {href: recipeURL, recipe: recipe}, recipe.title))
             ))
         }
       })
@@ -24979,6 +24984,8 @@ var request = require('superagent')
 var appConfig = require('./../config')
 var appActions = require('./../actions')
 
+var searchStore = require('./searchStore')
+
 
 var recipeStore = Reflux.createStore({
 
@@ -24988,15 +24995,16 @@ var recipeStore = Reflux.createStore({
   },
 
   loadRecipeData: function() {
-    console.log('loadRecipeData dentro de recipeStore');
+    // console.log('loadRecipeData dentro de recipeStore');
+    // console.log(searchStore.indexedRecipes);
     var recipeId = arguments[0]
-    console.log('find this shit');
-    console.dir(searchedRecipes);
-    if(this.recipeData[recipeId]) {
-      console.log('contains');
+    if(searchStore.indexedRecipes[recipeId]) {
+      // console.log('contains');
+      this.trigger(searchStore.indexedRecipes[recipeId])
+    }else if(this.recipeData[recipeId]){
       this.trigger(this.recipeData[recipeId])
     } else {
-      console.log('doesnt contain');
+      // console.log('doesnt contain');
       var self = this
       request
         .get(appConfig.LOCAL_API_HOST + '/api/recipe/' + recipeId)
@@ -25012,7 +25020,7 @@ var recipeStore = Reflux.createStore({
 })
 
 module.exports = recipeStore
-},{"./../actions":217,"./../config":218,"reflux":191,"superagent":211}],224:[function(require,module,exports){
+},{"./../actions":217,"./../config":218,"./searchStore":224,"reflux":191,"superagent":211}],224:[function(require,module,exports){
 var Reflux = require('reflux')
 var request = require('superagent')
 
@@ -25023,17 +25031,29 @@ var appActions = require('./../actions')
 var searchStore = Reflux.createStore({
 
   init: function() {
+    this.searchedRecipes = []
+    this.indexedRecipes = {}
+    this.currentSearchWord = ''
     this.listenTo(appActions.searchUpdate, this.handleSearchUpdate)
   },
 
   handleSearchUpdate: function() {
-    console.log('handleSearchUpdate dentro de recipeStore');
+    // console.log('handleSearchUpdate dentro de recipeStore');
     var self = this
     var searchString = arguments[0]
+    // console.dir(self.searchedRecipes)
+    // console.log('['+this.currentSearchWord + '] [' + searchString+']')
+    if(!self.searchedRecipes.length || this.currentSearchWord != searchString){
+      // console.log('if');
     request
       .get(appConfig.LOCAL_API_HOST + '/api/search/' + searchString)
       .end(function(err, res) {
+        self.currentSearchWord = searchString
         if(res.body && res.body.result) {
+          self.searchedRecipes = res.body.result;
+          for (var i = 0; i < res.body.result.length; i++) {
+            self.indexedRecipes[res.body.result[i].id] = res.body.result[i];
+          };
           self.trigger({
             searchString: searchString,
             searchResults: res.body.result
@@ -25045,9 +25065,22 @@ var searchStore = Reflux.createStore({
           })
         }
     })
+    }else{
+      // console.log('else');
+      self.trigger({
+            searchString: searchString,
+            searchResults: self.searchedRecipes
+          })
+    }
   }
 
 })
 
 module.exports = searchStore
-},{"./../actions":217,"./../config":218,"reflux":191,"superagent":211}]},{},[1]);
+},{"./../actions":217,"./../config":218,"reflux":191,"superagent":211}],225:[function(require,module,exports){
+module.exports=require(217)
+},{"/Users/andre/Desktop/CookPadWeb/react/build/actions/index.js":217,"reflux":191}],226:[function(require,module,exports){
+module.exports=require(218)
+},{"/Users/andre/Desktop/CookPadWeb/react/build/config/index.js":218}],227:[function(require,module,exports){
+module.exports=require(224)
+},{"./../actions":225,"./../config":226,"/Users/andre/Desktop/CookPadWeb/react/build/stores/searchStore.js":224,"reflux":191,"superagent":211}]},{},[1]);

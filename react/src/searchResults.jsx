@@ -47,6 +47,10 @@ var SearchResults = React.createClass({
     })
   },
 
+  clicked:function(index){
+    
+  },
+
   render: function() {
     var results = []
     if(this.state.searchResults && this.state.searchResults.length) {
@@ -59,7 +63,7 @@ var SearchResults = React.createClass({
               <div className="search-image">
                 <Link href={recipeURL}><img src={recipe.imageUrl} alt={recipe.title} /></Link>
               </div>
-              <h2 className="search-title"><Link href={recipeURL}>{recipe.title}</Link></h2>
+              <h2 className="search-title"><Link href={recipeURL} recipe={recipe}>{recipe.title}</Link></h2>
             </div>)
         }
       })
