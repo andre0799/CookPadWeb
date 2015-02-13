@@ -12,6 +12,7 @@ var Search = React.createClass({
   mixins: [Reflux.ListenerMixin],
 
   getInitialState: function() {
+    console.log('getInitialState');
     if(this.props.entryPath == '/') {
       var defaultClass = 'search-home'
     } else {
@@ -25,11 +26,13 @@ var Search = React.createClass({
   },
 
   componentDidMount: function() {
+    console.log('componentDidMount');
     this.listenTo(searchStore, this.stopLoading)
     this.refs.search.getDOMNode().focus()
   },
 
   handleSubmit: function(e) {
+    console.log('handleSubmit');
     e.preventDefault()
     if(this.state.searchString.trim().length) {
       this.setState({
@@ -40,6 +43,7 @@ var Search = React.createClass({
   },
 
   handleChange: function(e) {
+    console.log('handleChange');
     if(e.target.value.length) {
       this.setState({
         searchString: e.target.value,
@@ -53,6 +57,7 @@ var Search = React.createClass({
   },
 
   handleClick: function(e) {
+    console.log('handleClick');
     if(this.state.defaultClass != 'search-home') {
       this.setState({
         defaultClass: 'search-focused',
@@ -62,6 +67,7 @@ var Search = React.createClass({
   },
 
   handleBlur: function(e) {
+    console.log('handleBlur');
     if(this.state.defaultClass != 'search-home') {
       if(this.state.searchString && !this.state.searchString.length) {
         this.setState({
@@ -77,6 +83,7 @@ var Search = React.createClass({
   },
 
   stopLoading: function() {
+    console.log('stopLoading');
     this.setState({
       loading: false,
       defaultClass: 'search-blurred'
@@ -84,6 +91,7 @@ var Search = React.createClass({
   },
 
   render: function() {
+    console.log('render');
     var searchContext
     if(this.state.loading) {
       searchContext = <img className="search-loading" src="/images/cookpad.png" />
@@ -93,7 +101,7 @@ var Search = React.createClass({
     return (
       <div className={this.state.defaultClass}>
         <form method="get" action="/" className="search-form" onSubmit={this.handleSubmit}>
-          <input placeholder="Pulled Pork" type="text" ref="search" className="search-input" name="q" onChange={this.handleChange} onClick={this.handleClick} onBlur={this.handleBlur} value={this.state.searchString} />
+          <input placeholder="Pulled Pork" type="text" ref="search" className="search-input" onChange={this.handleChange} onClick={this.handleClick} onBlur={this.handleBlur} value={this.state.searchString} />
           {searchContext}
         </form>
       </div>

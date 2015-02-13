@@ -24651,11 +24651,12 @@ module.exports = appActions
 
 },{"reflux":191}],218:[function(require,module,exports){
 module.exports = {
-  LOCAL_API_HOST: 'http://localhost:4000',
+  LOCAL_API_HOST: 'https://cookpad-web-demo.herokuapp.com',
   REMOTE_API_HOST: 'api.allthecooks.com'
 }
 
-//https://cookpad-demo.herokuapp.com
+//https://cookpad-web-demo.herokuapp.com  --heroku
+//http://localhost:4000
 },{}],219:[function(require,module,exports){
 /** @jsx React.DOM */
 'use strict'
@@ -24796,6 +24797,7 @@ var Search = React.createClass({displayName: "Search",
   mixins: [Reflux.ListenerMixin],
 
   getInitialState: function() {
+    console.log('getInitialState');
     if(this.props.entryPath == '/') {
       var defaultClass = 'search-home'
     } else {
@@ -24809,11 +24811,13 @@ var Search = React.createClass({displayName: "Search",
   },
 
   componentDidMount: function() {
+    console.log('componentDidMount');
     this.listenTo(searchStore, this.stopLoading)
     this.refs.search.getDOMNode().focus()
   },
 
   handleSubmit: function(e) {
+    console.log('handleSubmit');
     e.preventDefault()
     if(this.state.searchString.trim().length) {
       this.setState({
@@ -24824,6 +24828,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleChange: function(e) {
+    console.log('handleChange');
     if(e.target.value.length) {
       this.setState({
         searchString: e.target.value,
@@ -24837,6 +24842,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleClick: function(e) {
+    console.log('handleClick');
     if(this.state.defaultClass != 'search-home') {
       this.setState({
         defaultClass: 'search-focused',
@@ -24846,6 +24852,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleBlur: function(e) {
+    console.log('handleBlur');
     if(this.state.defaultClass != 'search-home') {
       if(this.state.searchString && !this.state.searchString.length) {
         this.setState({
@@ -24861,6 +24868,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   stopLoading: function() {
+    console.log('stopLoading');
     this.setState({
       loading: false,
       defaultClass: 'search-blurred'
@@ -24868,6 +24876,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   render: function() {
+    console.log('render');
     var searchContext
     if(this.state.loading) {
       searchContext = React.createElement("img", {className: "search-loading", src: "/images/cookpad.png"})
@@ -24995,16 +25004,12 @@ var recipeStore = Reflux.createStore({
   },
 
   loadRecipeData: function() {
-    // console.log('loadRecipeData dentro de recipeStore');
-    // console.log(searchStore.indexedRecipes);
     var recipeId = arguments[0]
     if(searchStore.indexedRecipes[recipeId]) {
-      // console.log('contains');
       this.trigger(searchStore.indexedRecipes[recipeId])
     }else if(this.recipeData[recipeId]){
       this.trigger(this.recipeData[recipeId])
     } else {
-      // console.log('doesnt contain');
       var self = this
       request
         .get(appConfig.LOCAL_API_HOST + '/api/recipe/' + recipeId)

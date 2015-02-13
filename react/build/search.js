@@ -12,6 +12,7 @@ var Search = React.createClass({displayName: "Search",
   mixins: [Reflux.ListenerMixin],
 
   getInitialState: function() {
+    console.log('getInitialState');
     if(this.props.entryPath == '/') {
       var defaultClass = 'search-home'
     } else {
@@ -25,11 +26,13 @@ var Search = React.createClass({displayName: "Search",
   },
 
   componentDidMount: function() {
+    console.log('componentDidMount');
     this.listenTo(searchStore, this.stopLoading)
     this.refs.search.getDOMNode().focus()
   },
 
   handleSubmit: function(e) {
+    console.log('handleSubmit');
     e.preventDefault()
     if(this.state.searchString.trim().length) {
       this.setState({
@@ -40,6 +43,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleChange: function(e) {
+    console.log('handleChange');
     if(e.target.value.length) {
       this.setState({
         searchString: e.target.value,
@@ -53,6 +57,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleClick: function(e) {
+    console.log('handleClick');
     if(this.state.defaultClass != 'search-home') {
       this.setState({
         defaultClass: 'search-focused',
@@ -62,6 +67,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   handleBlur: function(e) {
+    console.log('handleBlur');
     if(this.state.defaultClass != 'search-home') {
       if(this.state.searchString && !this.state.searchString.length) {
         this.setState({
@@ -77,6 +83,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   stopLoading: function() {
+    console.log('stopLoading');
     this.setState({
       loading: false,
       defaultClass: 'search-blurred'
@@ -84,6 +91,7 @@ var Search = React.createClass({displayName: "Search",
   },
 
   render: function() {
+    console.log('render');
     var searchContext
     if(this.state.loading) {
       searchContext = React.createElement("img", {className: "search-loading", src: "/images/cookpad.png"})
